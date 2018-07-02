@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+    xmlns:tools="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+   >
+
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:freezesText="true"
+        android:gravity="center_horizontal"
+        android:text="Reconocimiento de Placa"
+        android:textSize="25sp"
+        android:typeface="serif"/>
+
+    <TextView
+        android:id="@+id/espacio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/reconocimiento"
+        android:onClick="reconocimientoPlaca"/>
+
+    <TextView
+        android:id="@+id/espacioB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        />
+
+   <!-- <ImageView
+        android:id="@+id/reconocimiento"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/registros"
+        android:onClick="registro"/>-->
+
+    <Button
+        android:id="@+id/bComunity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Comunidad"
+        android:onClick="comunity"/>
+    <Button
+        android:id="@+id/bOwner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Propietario"
+        android:onClick="owner"/>
+
+
+</LinearLayout>
