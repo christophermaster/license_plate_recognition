@@ -1,5 +1,11 @@
-<manifest package="com.sandro.openalpr">
+<manifest package="com.disca.openalpr" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application >
+
+    </application>
 
 </manifest>

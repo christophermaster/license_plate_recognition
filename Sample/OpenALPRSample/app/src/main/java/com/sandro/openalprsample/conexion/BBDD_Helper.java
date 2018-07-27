@@ -18,16 +18,23 @@ public class BBDD_Helper extends SQLiteOpenHelper {
 
 
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(Estructura_BBDD.CREATE_TABLA_COMUNIDAD);
         db.execSQL(Estructura_BBDD.CREATE_TABLA_PROPIETARIO);
         db.execSQL(Estructura_BBDD.CREATE_TABLA_PROPIEDAD);
+        db.execSQL(Estructura_BBDD.CREATE_TABLA_VEHICULO);
+        db.execSQL(Estructura_BBDD.CREATE_TABLA_HISTORICO);
+
     }
 
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
         db.execSQL(Estructura_BBDD.CREATE_TABLA_COMUNIDAD);
         db.execSQL(Estructura_BBDD.CREATE_TABLA_PROPIETARIO);
         db.execSQL(Estructura_BBDD.CREATE_TABLA_PROPIEDAD);
+        db.execSQL(Estructura_BBDD.CREATE_TABLA_VEHICULO);
+        db.execSQL(Estructura_BBDD.CREATE_TABLA_HISTORICO);
         onCreate(db);
 
     }

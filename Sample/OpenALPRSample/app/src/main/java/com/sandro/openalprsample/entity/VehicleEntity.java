@@ -2,80 +2,70 @@ package com.sandro.openalprsample.entity;
 
 public class VehicleEntity {
 
-    private Integer idVehicle;
-    private Integer idOwner;
-    private String  make;
-    private String pattern;
-    private String color;
-    private Integer year;
-    private String plateNumber;
+    private Integer veh_id;
+    private Integer own_id;
+    private Integer veh_year;
+    private String  veh_colour;
+    private String veh_licenceplate;
+    private String veh_make;
+    private String veh_model;
 
     public VehicleEntity() {
     }
 
-    public VehicleEntity(Integer idVehicle, Integer idOwner, String make, String pattern, String color, Integer year, String plateNumber) {
-        this.idVehicle = idVehicle;
-        this.idOwner = idOwner;
-        this.make = make;
-        this.pattern = pattern;
-        this.color = color;
-        this.year = year;
-        this.plateNumber = plateNumber;
+    public Integer getVeh_id() {
+        return veh_id;
     }
 
-    public Integer getIdVehicle() {
-        return idVehicle;
+    public void setVeh_id(Integer veh_id) {
+        this.veh_id = veh_id;
     }
 
-    public void setIdVehicle(Integer idVehicle) {
-        this.idVehicle = idVehicle;
+    public Integer getOwn_id() {
+        return own_id;
     }
 
-    public Integer getIdOwner() {
-        return idOwner;
+    public void setOwn_id(Integer own_id) {
+        this.own_id = own_id;
     }
 
-    public void setIdOwner(Integer idOwner) {
-        this.idOwner = idOwner;
+    public Integer getVeh_year() {
+        return veh_year;
     }
 
-    public String getMake() {
-        return make;
+    public void setVeh_year(Integer veh_year) {
+        this.veh_year = veh_year;
     }
 
-    public void setMake(String make) {
-        this.make = make;
+    public String getVeh_colour() {
+        return veh_colour;
     }
 
-    public String getPattern() {
-        return pattern;
+    public void setVeh_colour(String veh_colour) {
+        this.veh_colour = veh_colour;
     }
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+    public String getVeh_licenceplate() {
+        return veh_licenceplate;
     }
 
-    public String getColor() {
-        return color;
+    public void setVeh_licenceplate(String veh_licenceplate) {
+        this.veh_licenceplate = veh_licenceplate;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public String getVeh_make() {
+        return veh_make;
     }
 
-    public Integer getYear() {
-        return year;
+    public void setVeh_make(String veh_make) {
+        this.veh_make = veh_make;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public String getVeh_model() {
+        return veh_model;
     }
 
-    public String getPlateNumber() {
-        return plateNumber;
-    }
-
-    public void setPlateNumber(String plateNumber) {
-        this.plateNumber = plateNumber;
+    public void setVeh_model(String veh_model) {
+        this.veh_model = veh_model;
     }
 }

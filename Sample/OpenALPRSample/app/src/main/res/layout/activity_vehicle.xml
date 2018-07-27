@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,7 +22,7 @@
             android:layout_height="wrap_content"
             android:freezesText="true"
             android:gravity="center_horizontal"
-            android:text="Registro Propietario"
+            android:text="Registro Vehiculo"
             android:textSize="25sp"
             android:typeface="serif"/>
 
@@ -36,7 +34,7 @@
             android:background="@android:color/black"/>
 
         <EditText
-            android:id="@+id/idOwner"
+            android:id="@+id/idVehicle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -45,41 +43,51 @@
             />
 
         <EditText
+            android:id="@+id/marca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Marca"
+            />
+
+        <EditText
+            android:id="@+id/modelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Modelo"
+            />
+
+        <EditText
+            android:id="@+id/color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Color"
+            />
+
+        <EditText
+            android:id="@+id/ano"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Año"
+            />
+        <EditText
+            android:id="@+id/placa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Placa"
+            />
+
+        <Spinner
             android:id="@+id/nameOwner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Nombre"
-            />
-
-        <EditText
-            android:id="@+id/surnameOwner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Apellido"
-            />
-
-        <Spinner
-            android:id="@+id/idComunity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            />
-
-        <EditText
-            android:id="@+id/numberIdentity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Numero de identidad"
-            />
-
-        <Spinner
-            android:id="@+id/typeIdentity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -95,7 +103,7 @@
             android:layout_height="wrap_content"
             android:text="Ingresar"
             android:onClick="create"/>
-        <Button
+ <!--       <Button
             android:id="@+id/buscar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,10 +121,10 @@
             android:layout_height="wrap_content"
             android:text="actualizar"
             android:onClick="update"/>
-
+-->
 
         <Spinner
-            android:id="@+id/listOwner"
+            android:id="@+id/listVehicle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />

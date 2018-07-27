@@ -1,27 +1,36 @@
 package com.sandro.openalprsample.entity;
 
-public class HistoricalAccess {
+import java.sql.Blob;
+
+public class HistoricalAccessEntity {
 
     private Integer idHistorical;
-    private Integer idOwner;
+    private Integer own_id;
     private String date;
     private String hour;
     private String typeAccess;
     private String typeSecuriry;
-    private String image;
+    private byte[] image;
 
-    public HistoricalAccess() {
+    public Integer getOwn_id() {
+        return own_id;
     }
 
-    public HistoricalAccess(Integer idHistorical, Integer idOwner, String date, String hour, String typeAccess, String typeSecuriry, String image) {
-        this.idHistorical = idHistorical;
-        this.idOwner = idOwner;
-        this.date = date;
-        this.hour = hour;
-        this.typeAccess = typeAccess;
-        this.typeSecuriry = typeSecuriry;
+    public void setOwn_id(Integer own_id) {
+        this.own_id = own_id;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public HistoricalAccessEntity() {
+    }
+
 
 
     public Integer getIdHistorical() {
@@ -33,11 +42,11 @@ public class HistoricalAccess {
     }
 
     public Integer getIdOwner() {
-        return idOwner;
+        return own_id;
     }
 
     public void setIdOwner(Integer idOwner) {
-        this.idOwner = idOwner;
+        this.own_id = idOwner;
     }
 
     public String getDate() {
@@ -72,11 +81,5 @@ public class HistoricalAccess {
         this.typeSecuriry = typeSecuriry;
     }
 
-    public String getImage() {
-        return image;
-    }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

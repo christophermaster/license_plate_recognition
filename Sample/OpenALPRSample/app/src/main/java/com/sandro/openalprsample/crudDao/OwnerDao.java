@@ -81,12 +81,12 @@ public class OwnerDao {
 
             comu  = new OwnerEntity();
 
-            comu.setIdOwner(c.getInt(0));
-            comu.setIdcommunity(c.getInt(1));
-            comu.setNameOwner(c.getString(2));
-            comu.setSurnameOwner(c.getString(3));
-            comu.setNumberIdentity(c.getString(4));
-            comu.setTypeIdentity(c.getString(5));
+            comu.setOwn_id(c.getInt(0));
+            comu.setCom_id(c.getInt(1));
+            comu.setOwn_name(c.getString(2));
+            comu.setOwn_lasname(c.getString(3));
+            comu.setOwn_identification_number(c.getString(4));
+            comu.setOwn_type_identification(c.getString(5));
 
             listOwner.add(comu);
 

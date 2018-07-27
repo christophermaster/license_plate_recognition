@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,9 +17,11 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import android.widget.TextView;
@@ -26,17 +29,25 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.sandro.openalprsample.conexion.BBDD_Helper;
+import com.sandro.openalprsample.crudDao.HistoricalAccessDao;
+import com.sandro.openalprsample.crudDao.OwnerDao;
+import com.sandro.openalprsample.crudDao.VehicleDao;
 import com.squareup.picasso.Picasso;
 
 import org.openalpr.OpenALPR;
 import org.openalpr.model.Results;
 import org.openalpr.model.ResultsError;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import java.util.Locale;
@@ -47,17 +58,25 @@ public class ReconocimientoPlaca extends AppCompatActivity {
     static final String ANDROID_DATA_DIR = "/data/data/com.sandro.openalprsample";
 
     private File destination;
+
     private TextView resultTextView;
     private TextView resultPorcenytaje;
     private TextView noExiste;
+    private TextView pase;
+
     private ImageView imageView;
     private ImageView camara;
     private ImageView carpeta;
+
     private static final int PICK_IMAGE = 100;
     private Uri imageUri;
     private String name ;
     private Boolean type = true;
     final int STORAGE=1;
+
+    private BBDD_Helper helper ;
+    private Boolean verifivation ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +87,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
         resultTextView = (TextView) findViewById(R.id.textView);
         resultPorcenytaje = (TextView) findViewById(R.id.porcentaje);
         noExiste = (TextView) findViewById(R.id.noexiste);
+        pase = (TextView) findViewById(R.id.pase);
         imageView = (ImageView) findViewById(R.id.imageView);
         camara = (ImageView) findViewById(R.id.camara);
         carpeta = (ImageView) findViewById(R.id.carpeta);
@@ -78,7 +98,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
                 ActivityResult();
             }
         });*/
-
+        helper = new BBDD_Helper(this);
         carpeta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +121,8 @@ public class ReconocimientoPlaca extends AppCompatActivity {
             }
         });
     }
+
+
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         gallery.setType("image/");
@@ -122,11 +144,13 @@ public class ReconocimientoPlaca extends AppCompatActivity {
 
         imageView.setImageDrawable(getResources().getDrawable(R.drawable.no_image));
         noExiste.setText("");
+        pase.setText("");
         resultTextView.setText("");
         resultPorcenytaje.setText("");
+        verifivation = false;
 
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE && type){
-            System.out.print("aqui");
+
             imageUri = data.getData();
             destination = new File(getPath(imageUri));
             imageView.setImageURI(imageUri);
@@ -144,6 +168,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
                 checkPermission();
 
                 FileInputStream in = new FileInputStream(destination);
+
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 10;
 
@@ -177,11 +202,24 @@ public class ReconocimientoPlaca extends AppCompatActivity {
                                             listPlaca.append("\n");
                                             listPorcentaje.append(results.getResults().get(0).getCandidates().get(i).getConfidence() + " %");
                                             listPorcentaje.append("\n");
+
+                                            if(!verifivation){
+
+                                                SQLiteDatabase db = helper.getWritableDatabase();
+                                                verifivation = VehicleDao.existePlaca(
+                                                        results.getResults().get(0).getCandidates().get(i).getPlate(),db);
+
+                                            }
+
                                             System.out.println("Plate: " + results.getResults().get(0).getCandidates().get(i).getPlate());
                                         }
                                         resultTextView.setText(listPlaca);
                                         resultPorcenytaje.setText(listPorcentaje);
-
+                                        try {
+                                            create(verifivation);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
 
                                     } else {
                                         noExiste.setText("Error , no se encontró placa");
@@ -255,6 +293,72 @@ public class ReconocimientoPlaca extends AppCompatActivity {
 
         return df.format(date);
     }
+
+
+    public void create(Boolean existe) throws IOException {
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        SimpleDateFormat formatoFecha,formatohora;
+        byte[] photo;
+
+        photo = readBytes(imageUri);
+        Date fechaActual = new Date();
+
+        formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        formatohora = new SimpleDateFormat("HH:mm:ss");
+
+
+       Long newRowId = HistoricalAccessDao.createAccess(1,formatoFecha.format(fechaActual),
+               formatohora.format(fechaActual), "E","A",photo,db );
+
+
+        if(newRowId == -1){
+
+            Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
+
+        }else{
+
+            if(existe){
+                pase.setText("Placa Permitida.");
+
+            }else {
+                pase.setText("Placa No Permitada.");
+            }
+
+            Toast.makeText(getApplicationContext(),"Se guardó el registro ", Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+
+    public byte[] readBytes(Uri uri) throws IOException {
+
+
+        // this dynamically extends to take the bytes you read
+
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+
+        // this is storage overwritten on each iteration with bytes
+
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+        // we need to know how may bytes were read to write them to the byteBuffer
+
+        int len = 0;
+
+        while ((len = inputStream.read(buffer)) != -1) {
+
+            byteBuffer.write(buffer, 0, len);
+
+        }
+       // and then we can return your byte array.
+        return byteBuffer.toByteArray();
+
+    }
+
+
 
 
 }

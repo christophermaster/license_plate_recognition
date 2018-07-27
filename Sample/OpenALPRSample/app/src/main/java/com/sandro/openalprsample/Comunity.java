@@ -1,6 +1,5 @@
 package com.sandro.openalprsample;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +15,11 @@ import android.widget.Toast;
 
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.ComunityDao;
-import com.sandro.openalprsample.entity.Comunity;
 import com.sandro.openalprsample.estructura.Estructura_BBDD;
 
 import java.util.ArrayList;
 
-public class Create extends AppCompatActivity {
-
+public class Comunity extends AppCompatActivity {
 
     private Button crear, buscar,eliminar,actualizar;
     private EditText id, nombre, tipo;
@@ -31,13 +28,13 @@ public class Create extends AppCompatActivity {
     private ComunityDao comunityDao;
     private BBDD_Helper helper ;
     private ArrayList<String> listaPersonas;
-    private ArrayList<Comunity> comunidad;
+    private ArrayList<com.sandro.openalprsample.entity.Comunity> comunidad;
     private ArrayAdapter<CharSequence> adaptador ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create);
+        setContentView(R.layout.activity_comunity);
 
         crear =(Button)findViewById(R.id.ingresar);
         buscar =(Button)findViewById(R.id.buscar);
@@ -61,10 +58,10 @@ public class Create extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 if(position!=0)
-                     texto.setText(comunidad.get(position-1).getIdComunity().toString());
-                 else
-                     texto.setText("");
+                if(position!=0)
+                    texto.setText(comunidad.get(position-1).getIdComunity().toString());
+                else
+                    texto.setText("");
 
             }
 
@@ -77,8 +74,6 @@ public class Create extends AppCompatActivity {
 
 
     }
-
-
 
     public void createComunity(View view){
 
@@ -127,40 +122,40 @@ public class Create extends AppCompatActivity {
 
         SQLiteDatabase db = helper.getWritableDatabase();
 
-       if(ComunityDao.deleteComunity( id, db ) == 1){
+        if(ComunityDao.deleteComunity( id, db ) == 1){
 
-           Toast.makeText(getApplicationContext(), "Se borro el registro", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Se borro el registro", Toast.LENGTH_LONG).show();
 
-           id.setText("");
-           nombre.setText("");
-           tipo.setText("");
+            id.setText("");
+            nombre.setText("");
+            tipo.setText("");
 
-           consultarComunidad();
+            consultarComunidad();
 
-           adaptador = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listaPersonas);
-           spinner.setAdapter(adaptador);
+            adaptador = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listaPersonas);
+            spinner.setAdapter(adaptador);
 
-       }else{
+        }else{
 
-           Toast.makeText(getApplicationContext(), "No se borro ningun registro ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No se borro ningun registro ", Toast.LENGTH_LONG).show();
 
-       }
+        }
 
 
     }
 
-    
+
     private void consultarComunidad() {
 
         SQLiteDatabase db = helper.getWritableDatabase();
 
-       comunidad = ComunityDao.listComunity(db);
+        comunidad = ComunityDao.listComunity(db);
 
-       if(comunidad!=null)
+        if(comunidad!=null)
             obtenerlLista();
-       else{
-           listaPersonas.add("Selecciones");
-       }
+        else{
+            listaPersonas.add("Selecciones");
+        }
 
 
     }
@@ -217,10 +212,4 @@ public class Create extends AppCompatActivity {
 
         }
     }
-
-
-
-
 }
-
-

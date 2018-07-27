@@ -2,60 +2,57 @@ package com.sandro.openalprsample.estructura;
 
 public class Estructura_BBDD {
 
-    public static final String TABLA_COMUNIDAD = "COMUNIDAD";
+    public static final String TABLA_COMUNIDAD = "COMUNITY";
 
     public static final String COLUMNA_COMUNIDAD_ID = "COM_ID";
-    public static final String COLUMNA_COMUNIDAD_TIPOCOMUNIDDA = "COM_TIPOCOMUNIDAD";
-    public static final String COLUMNA_COMUNIDAD_NOMBRE = "COM_NOMBRE";
+    public static final String COLUMNA_COMUNIDAD_TIPOCOMUNIDDA = "COM_TYPE";
+    public static final String COLUMNA_COMUNIDAD_NOMBRE = "COM_NAME";
 
 
-    public static final String TABLA_PROPIETARIO = "PROPIETARIO";
+    public static final String TABLA_PROPIETARIO = "OWNER";
 
-    public static final String COLUMNA_PROPIETARIO_ID = "PRO_ID";
-    public static final String COLUMNA_PROPIETARIO_NOMBRE = "PRO_NOMBRE";
-    public static final String COLUMNA_PROPIETARIO_APELLIDO = "PRO_APELLIDO";
-    public static final String COLUMNA_PROPIETARIO_NUMEROIDENTIDAD = "PRO_IDENTIDAD";
-    public static final String COLUMNA_PROPIETARIO_TIPOIDENTIDAD =  "PRO_TIPOIDENTIDAD";
+    public static final String COLUMNA_PROPIETARIO_ID = "OWN_ID";
+    public static final String COLUMNA_PROPIETARIO_NOMBRE = "OWN_NAME";
+    public static final String COLUMNA_PROPIETARIO_APELLIDO = "OWN_LASTNAME";
+    public static final String COLUMNA_PROPIETARIO_NUMEROIDENTIDAD = "OWN_IDENTIFICATION_NUMBER";
+    public static final String COLUMNA_PROPIETARIO_TIPOIDENTIDAD =  "OWN_TYPE_IDENTIFICATION";
     public static final String COLUMNA_PROPIETARIO_IDCOMUNIDAD =  "COM_ID";
 
 
 
-    public static final String TABLA_PROPIEDAD = "PROPIEDAD";
+    public static final String TABLA_PROPIEDAD = "OWNERSHIP";
 
-    public static final String COLUMNA_PROPIEDAD_ID = "PAD_ID";
-    public static final String COLUMNA_PROPIEDAD_IDPROPIETARIO = "PRO_ID";
-    public static final String COLUMNA_PROPIEDAD_NUMERODEPROPIEDAD = "PAD_NUMEROPROPIEDAD";
-    public static final String COLUMNA_PROPIEDAD_TIPOPROPIETARIO = "PAD_TIPOPROPIEDAD";
-    public static final String COLUMNA_PROPIEDAD_HABITADO = "PAD_HABITADO";
-    public static final String COLUMNA_PROPIEDAD_AREA = "PAD_AREA";
-
-
+    public static final String COLUMNA_PROPIEDAD_ID = "OSH_ID";
+    public static final String COLUMNA_PROPIEDAD_IDPROPIETARIO = "OWN_ID";
+    public static final String COLUMNA_PROPIEDAD_NUMERODEPROPIEDAD = "OSH_NUMBER";
+    public static final String COLUMNA_PROPIEDAD_TIPOPROPIETARIO = "OSH_TYPE";
+    public static final String COLUMNA_PROPIEDAD_HABITADO = "OSH_INHABITED";
+    public static final String COLUMNA_PROPIEDAD_AREA = "OSH_AREA";
 
 
 
-    public static final String TABLA_VEHICULO = "VEHICULO";
+
+
+    public static final String TABLA_VEHICULO = "VEHICLE";
 
     public static final String COLUMNA_VEHICULO_ID = "VEH_ID";
-    public static final String COLUMNA_VEHICULO_IDPROPIETARIO = "PRO_ID";
-    public static final String COLUMNA_VEHICULO_MARCA = "VEH_MARCA";
-    public static final String COLUMNA_VEHICULO_MODELO = "VEH_MODELO";
-    public static final String COLUMNA_VEHICULO_COLOR = "VEH_COLOR";
-    public static final String COLUMNA_VEHICULO_AÑO = "VEH_AÑO";
-    public static final String COLUMNA_VEHICULO_PLATENUMBER = "VEH_NUMEROPLACA";
+    public static final String COLUMNA_VEHICULO_IDPROPIETARIO = "OWN_ID";
+    public static final String COLUMNA_VEHICULO_MARCA = "VEH_MAKE";
+    public static final String COLUMNA_VEHICULO_MODELO = "VEH_MODEL";
+    public static final String COLUMNA_VEHICULO_COLOR = "VEH_COLOUR";
+    public static final String COLUMNA_VEHICULO_AÑO = "VEH_YEAR";
+    public static final String COLUMNA_VEHICULO_PLATENUMBER = "VEH_LICENCEPLATE";
 
 
-    public static final String TABLA_HISTORICO = "HISTORICOACCESO";
+    public static final String TABLA_HISTORICO = "ACCESSHISTORY";
 
     public static final String COLUMNA_HISTORICO_ID = "HIS_ID";
-    public static final String COLUMNA_HISTORICO_IDPROPIETARIO = "PRO_ID";
-    public static final String COLUMNA_HISTORICO_FECHA = "HIS_FECHA";
-    public static final String COLUMNA_HISTORICO_HORA = "HIS_HORA";
-    public static final String COLUMNA_HISTORICO_TIPOACCESO = "HIS_TIPOACESSO";
-    public static final String COLUMNA_HISTORICO_TIPOSEGURIDDA = "HIS_TIPOSEGURIDAD";
-    public static final String COLUMNA_HISTORICO_FOTO = "HIS_FOTO";
-
-    public static final String COMA = ",";
-
+    public static final String COLUMNA_HISTORICO_IDPROPIETARIO = "OWN_ID";
+    public static final String COLUMNA_HISTORICO_FECHA = "HIS_DATE";
+    public static final String COLUMNA_HISTORICO_HORA = "HIS_HOUR";
+    public static final String COLUMNA_HISTORICO_TIPOACCESO = "HIS_TYPEACCESS";
+    public static final String COLUMNA_HISTORICO_TIPOSEGURIDDA = "HIS_TYPESECURITY";
+    public static final String COLUMNA_HISTORICO_FOTO = "HIS_PHOTO";
 
 
 
@@ -105,11 +102,11 @@ public class Estructura_BBDD {
             Estructura_BBDD.TABLA_HISTORICO + "("
             + Estructura_BBDD.COLUMNA_HISTORICO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO +" INTEGER NOT NULL,"
-            + Estructura_BBDD.COLUMNA_HISTORICO_FECHA
-            + Estructura_BBDD.COLUMNA_HISTORICO_HORA
+            + Estructura_BBDD.COLUMNA_HISTORICO_FECHA + " VARCHAR(30) NOT NULL,"
+            + Estructura_BBDD.COLUMNA_HISTORICO_HORA + " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_TIPOACCESO +" VARCHAR(20) NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_TIPOSEGURIDDA + " VARCHAR(30) NOT NULL,"
-            + Estructura_BBDD.COLUMNA_HISTORICO_FOTO + "BLOB NOT NULL,"
+            + Estructura_BBDD.COLUMNA_HISTORICO_FOTO + " BLOB NOT NULL,"
             +"  FOREIGN KEY("+ Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO
             + ") REFERENCES bus("+ COLUMNA_PROPIETARIO_ID +") )";
 
@@ -130,8 +127,5 @@ public class Estructura_BBDD {
     public static final String DELETE_TABLA_VEHICLE = "DROP TABLE IF EXISTS "
             + Estructura_BBDD.TABLA_VEHICULO;
 
-
-
-    private Estructura_BBDD(){}
 
 }

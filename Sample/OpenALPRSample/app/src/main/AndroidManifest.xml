@@ -21,8 +21,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".ReconocimientoPlaca" />
-        <activity android:name=".Create" />
         <activity android:name=".Owner" />
+        <activity android:name=".panelAdministrativo" />
+        <activity android:name=".Comunity" />
+        <activity android:name=".OwnerShip" />
+        <activity android:name=".Vehicle" />
+        <activity android:name=".AccessHistory"></activity>
     </application>
 
 </manifest>

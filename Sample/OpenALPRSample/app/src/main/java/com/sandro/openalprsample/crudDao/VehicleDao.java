@@ -73,7 +73,7 @@ public class VehicleDao {
 
     public static ArrayList<VehicleEntity> listVehicle(SQLiteDatabase db){
 
-        VehicleEntity comu = null;
+        VehicleEntity comu;
         listVehicle = new ArrayList<VehicleEntity>();
 
         Cursor c = db.rawQuery("SELECT * FROM " + Estructura_BBDD.TABLA_VEHICULO,null);
@@ -81,19 +81,35 @@ public class VehicleDao {
         while (c.moveToNext()){
 
             comu  = new VehicleEntity();
-            comu.setIdVehicle(c.getInt(0));
-            comu.setIdOwner(c.getInt(1));
-            comu.setMake(c.getString(2));
-            comu.setPattern(c.getString(3));
-            comu.setColor(c.getString(4));
-            comu.setYear(c.getInt(5));
-            comu.setPlateNumber(c.getString(6));
+            comu.setVeh_id(c.getInt(0));
+            comu.setOwn_id(c.getInt(1));
+            comu.setVeh_make(c.getString(2));
+            comu.setVeh_model(c.getString(3));
+            comu.setVeh_colour(c.getString(4));
+            comu.setVeh_year(c.getInt(5));
+            comu.setVeh_licenceplate(c.getString(6));
 
             listVehicle.add(comu);
 
         }
 
         return listVehicle;
+    }
+
+    public static Boolean existePlaca(String placa,SQLiteDatabase db){
+
+
+        Cursor c = db.rawQuery("SELECT * FROM " + Estructura_BBDD.TABLA_VEHICULO + " WHERE " +
+                Estructura_BBDD.COLUMNA_VEHICULO_PLATENUMBER + " = " +"'"+ placa+"'",null);
+
+        if(c != null && c.moveToFirst()){
+            c.close();
+            return true;
+
+        }
+
+        return false;
+
     }
 
 }

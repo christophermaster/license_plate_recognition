@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.sandro.openalprsample"
+        applicationId "com.disca.openalprsample"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

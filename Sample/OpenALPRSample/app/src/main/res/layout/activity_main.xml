@@ -53,18 +53,13 @@
         android:src="@drawable/registros"
         android:onClick="registro"/>-->
 
+
     <Button
-        android:id="@+id/bComunity"
+        android:id="@+id/copiar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Comunidad"
-        android:onClick="comunity"/>
-    <Button
-        android:id="@+id/bOwner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Propietario"
-        android:onClick="owner"/>
+        android:text="Panel administrativo"
+        android:onClick="panelAdministrativo"/>
 
 
 </LinearLayout>

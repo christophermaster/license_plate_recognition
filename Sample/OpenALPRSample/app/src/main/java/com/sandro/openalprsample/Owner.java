@@ -86,7 +86,7 @@ public class Owner extends AppCompatActivity {
 
 
         //EVENTOS CON SPINNER
-        listComunity("Seleccione");
+        listComunity("Seleccione Comunidad");
         adaptadorComunity = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listComunitySpinner);
         idComunity.setAdapter(adaptadorComunity);
 
@@ -112,7 +112,7 @@ public class Owner extends AppCompatActivity {
 
             }
         });
-        listTypeIdentity("Seleccione");
+        listTypeIdentity("Tipo de Identificación");
         adaptadorTypeIdentity = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listSpinnerTypeIdentity);
         typeIdentity.setAdapter(adaptadorTypeIdentity);
         typeIdentity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -225,7 +225,7 @@ public class Owner extends AppCompatActivity {
             numberIdentity.setText("");
 
 
-            listTypeIdentity("Seleccione");
+            listTypeIdentity("Tipo De Identificación");
             adaptadorTypeIdentity = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listSpinnerTypeIdentity);
             typeIdentity.setAdapter(adaptadorTypeIdentity);
 
@@ -307,11 +307,11 @@ public class Owner extends AppCompatActivity {
     private void listOwnerSpinner() {
 
         listOwnerSpinner = new ArrayList<String>();
-        listOwnerSpinner.add("Selecciones");
+        listOwnerSpinner.add("Lista de Usuario");
 
         for (int i= 0; i<listOwner.size();i++){
-            listOwnerSpinner.add(listOwner.get(i).getNameOwner() + "-" + listOwner.get(i).getIdcommunity()+ "-"
-            + listOwner.get(i).getTypeIdentity());
+            listOwnerSpinner.add(listOwner.get(i).getOwn_name() + "-" + listOwner.get(i).getCom_id()+ "-"
+            + listOwner.get(i).getOwn_type_identification());
 
         }
     }
@@ -325,7 +325,7 @@ public class Owner extends AppCompatActivity {
         if(listComunity!=null)
             listSpinnerComunity(valor);
         else{
-            listComunitySpinner.add("Selecciones");
+            listComunitySpinner.add("Seleccione Comunidad");
         }
 
 
