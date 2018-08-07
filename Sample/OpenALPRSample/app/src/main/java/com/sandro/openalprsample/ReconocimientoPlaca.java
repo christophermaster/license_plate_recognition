@@ -192,7 +192,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
                                     StringBuilder listPlaca = new StringBuilder();
                                     StringBuilder listPorcentaje = new StringBuilder();
 
-                                    if (results != null) {
+                                    if (results != null && results.getResults() !=null) {
                                         listPlaca.append("Placa");
                                         listPlaca.append("\n");
                                         listPorcentaje.append("Porcentaje %");

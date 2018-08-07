@@ -36,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void api(View vista){
+
+        Intent reconocimiento = new Intent(this, ListApiRest.class);
+        startActivity(reconocimiento);
+
+
+    }
+
+
 
 
 }

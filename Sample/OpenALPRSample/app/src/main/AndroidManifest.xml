@@ -26,7 +26,8 @@
         <activity android:name=".Comunity" />
         <activity android:name=".OwnerShip" />
         <activity android:name=".Vehicle" />
-        <activity android:name=".AccessHistory"></activity>
+        <activity android:name=".AccessHistory" />
+        <activity android:name=".ListApiRest"></activity>
     </application>
 
 </manifest>

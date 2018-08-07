@@ -60,6 +60,12 @@
         android:layout_height="wrap_content"
         android:text="Panel administrativo"
         android:onClick="panelAdministrativo"/>
+    <Button
+        android:id="@+id/rest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Api Rest"
+        android:onClick="api"/>
 
 
 </LinearLayout>
