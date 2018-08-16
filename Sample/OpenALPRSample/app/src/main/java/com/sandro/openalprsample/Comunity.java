@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sandro.openalprsample.apiRest.models.ComunityApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.ComunityDao;
 import com.sandro.openalprsample.estructura.Estructura_BBDD;
@@ -21,45 +22,58 @@ import java.util.ArrayList;
 
 public class Comunity extends AppCompatActivity {
 
-    private Button crear, buscar,eliminar,actualizar;
-    private EditText id, nombre, tipo;
+
+    private Button  create,
+                    search,
+                    delete,
+                    update;
+
+    private EditText id,
+                     name,
+                     type;
+
     private Spinner spinner;
     private TextView texto;
-    private ComunityDao comunityDao;
-    private BBDD_Helper helper ;
+
+
     private ArrayList<String> listaPersonas;
-    private ArrayList<com.sandro.openalprsample.entity.Comunity> comunidad;
+    private ArrayList<ComunityApi> listComunity;
     private ArrayAdapter<CharSequence> adaptador ;
+
+    private BBDD_Helper helper ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comunity);
 
-        crear =(Button)findViewById(R.id.ingresar);
-        buscar =(Button)findViewById(R.id.buscar);
-        eliminar =(Button)findViewById(R.id.eliminar);
-        actualizar =(Button)findViewById(R.id.actualizar);
+
+        create =(Button)findViewById(R.id.ingresar);
+        search =(Button)findViewById(R.id.buscar);
+        delete =(Button)findViewById(R.id.eliminar);
+        update =(Button)findViewById(R.id.actualizar);
 
         id = (EditText)findViewById(R.id.id);
-        nombre = (EditText)findViewById(R.id.nombre);
-        tipo = (EditText)findViewById(R.id.tipo) ;
+        name = (EditText)findViewById(R.id.nombre);
+        type = (EditText)findViewById(R.id.tipo) ;
 
 
         helper = new BBDD_Helper(this);
         spinner = (Spinner)findViewById(R.id.spinner);
         texto = (TextView)findViewById(R.id.texto);
 
-        consultarComunidad();
+        listComunity();
+
         adaptador = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listaPersonas);
         spinner.setAdapter(adaptador);
 
+        //Cargar Lista de comunidad
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0)
-                    texto.setText(comunidad.get(position-1).getIdComunity().toString());
+                    texto.setText(listComunity.get(position-1).getId().toString());
                 else
                     texto.setText("");
 
@@ -75,21 +89,39 @@ public class Comunity extends AppCompatActivity {
 
     }
 
+
+    /**Create Comunity
+     *
+     * @param view
+     *
+     * */
     public void createComunity(View view){
 
+
+        //Se crea la instancia
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        Long newRowId = ComunityDao.createComunity(nombre,tipo,db);
+        //instancia del modelo
+        ComunityApi model = new ComunityApi();
+
+        //set
+        model.setNameComunity( name.getText().toString());
+        model.setTypeComunity( type.getText().toString());
+        model.setId(Integer.valueOf(id.getText().toString()));
 
 
+        // se crea la comunidad
+        Long newRowId = ComunityDao.createComunity(model,db);
+
+        //Se verifica si se guardo el registro
         if(newRowId == -1){
 
             Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
 
         }else{
 
-            Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
-            consultarComunidad();
+            Toast.makeText(getApplicationContext(),"SE guardó el registro ", Toast.LENGTH_LONG).show();
+            listComunity();
             adaptador = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listaPersonas);
             spinner.setAdapter(adaptador);
         }
@@ -97,16 +129,29 @@ public class Comunity extends AppCompatActivity {
 
     }
 
+    /**Update comunity
+     *
+     * @param view
+     * */
 
     public void updateComunity(View view){
 
+        //Se crea la instancia
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //instancia del modelo
+        ComunityApi model = new ComunityApi();
 
-        if(ComunityDao.updateComunity( nombre,  tipo,  id,  db) == 1){
+        //set
+        model.setNameComunity( name.getText().toString());
+        model.setTypeComunity( type.getText().toString());
+        model.setId(Integer.valueOf(id.getText().toString()));
+
+        //Se verifica si se actualizo el registro
+        if(ComunityDao.updateComunity(model,  db) == 1){
             Toast.makeText(getApplicationContext(), "Se actualizó el registro" , Toast.LENGTH_LONG).show();
 
-            consultarComunidad();
+            listComunity();
             adaptador = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listaPersonas);
             spinner.setAdapter(adaptador);
 
@@ -117,20 +162,26 @@ public class Comunity extends AppCompatActivity {
 
     }
 
+    /**Delete comunity
+     *
+     * @param view
+     * */
 
     public void deleteComunity(View view){
 
+        //Se crea la instancia
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        if(ComunityDao.deleteComunity( id, db ) == 1){
+        //Se verifica si se Elimino el registro
+        if(ComunityDao.deleteComunity( id.getText().toString(), db ) == 1){
 
             Toast.makeText(getApplicationContext(), "Se borro el registro", Toast.LENGTH_LONG).show();
 
             id.setText("");
-            nombre.setText("");
-            tipo.setText("");
+            name.setText("");
+            type.setText("");
 
-            consultarComunidad();
+            listComunity();
 
             adaptador = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listaPersonas);
             spinner.setAdapter(adaptador);
@@ -145,51 +196,56 @@ public class Comunity extends AppCompatActivity {
     }
 
 
-    private void consultarComunidad() {
-
+    private void listComunity() {
+        //Se crea la instancia
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        comunidad = ComunityDao.listComunity(db);
+        //Se obtine la lista de las comunidades
+        listComunity = ComunityDao.listComunity(db);
 
-        if(comunidad!=null)
-            obtenerlLista();
-        else{
-            listaPersonas.add("Selecciones");
+        listaPersonas = new ArrayList<>();
+
+        listaPersonas.add("Seleccione Comunidad");
+
+        if(listComunity!=null){
+
+            for (int i= 0; i<listComunity.size();i++){
+                listaPersonas.add(listComunity.get(i).getNameComunity() + "-" + listComunity.get(i).getTypeComunity());
+
+            }
         }
 
 
     }
 
-    private void obtenerlLista() {
-
-        listaPersonas = new ArrayList<String>();
-        listaPersonas.add("Selecciones");
-
-        for (int i= 0; i<comunidad.size();i++){
-            listaPersonas.add(comunidad.get(i).getNameComunity() + "-" + comunidad.get(i).getTypeComunity());
-
-        }
-    }
 
 
-
-
+    /**Search Comunity
+     *
+     * @param view
+     * */
     public void buscar(View view) {
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getReadableDatabase();
 
+        //Colocamos los campos que queremos que se muestre en la busqueda
         String[] projection = {
                 //  Estructura_BBDD.COLUMNA_COMUNIDAD_ID,
                 Estructura_BBDD.COLUMNA_COMUNIDAD_NOMBRE,
                 Estructura_BBDD.COLUMNA_COMUNIDAD_TIPOCOMUNIDDA
         };
 
+        //condicion de busqueda
         String selection = Estructura_BBDD.COLUMNA_COMUNIDAD_ID + " = ?";
+
+        //valor de busqueda
         String[] selectionArgs = {id.getText().toString()};
 
-        String sortOrder = Estructura_BBDD.COLUMNA_COMUNIDAD_NOMBRE + "DESC;";
+        //String sortOrder = Estructura_BBDD.COLUMNA_COMUNIDAD_NOMBRE + "DESC;";
 
         try {
+            //Creacion de la consulta para la busqueda
 
             Cursor c = db.query(
 
@@ -205,8 +261,8 @@ public class Comunity extends AppCompatActivity {
 
             c.moveToFirst();
 
-            nombre.setText(c.getString(0));
-            tipo.setText(c.getString(1));
+            name.setText(c.getString(0));
+            type.setText(c.getString(1));
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "No se encontró registro", Toast.LENGTH_LONG).show();
 

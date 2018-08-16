@@ -48,6 +48,7 @@ public class Estructura_BBDD {
 
     public static final String COLUMNA_HISTORICO_ID = "HIS_ID";
     public static final String COLUMNA_HISTORICO_IDPROPIETARIO = "OWN_ID";
+    public static final String COLUMNA_HISTORICO_IDCOMUNIDAD = "COM_ID";
     public static final String COLUMNA_HISTORICO_FECHA = "HIS_DATE";
     public static final String COLUMNA_HISTORICO_HORA = "HIS_HOUR";
     public static final String COLUMNA_HISTORICO_TIPOACCESO = "HIS_TYPEACCESS";
@@ -70,9 +71,10 @@ public class Estructura_BBDD {
             + Estructura_BBDD.COLUMNA_PROPIETARIO_NOMBRE + " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_PROPIETARIO_APELLIDO + " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_PROPIETARIO_NUMEROIDENTIDAD + " VARCHAR(15) NOT NULL,"
-            +Estructura_BBDD.COLUMNA_PROPIETARIO_TIPOIDENTIDAD + " VARCHAR(3) NOT NULL ,"
+            + Estructura_BBDD.COLUMNA_PROPIETARIO_TIPOIDENTIDAD + " VARCHAR(3) NOT NULL ,"
+            +"UNIQUE("+ Estructura_BBDD.COLUMNA_PROPIETARIO_NUMEROIDENTIDAD  +")"
             +"  FOREIGN KEY("+ Estructura_BBDD.COLUMNA_PROPIETARIO_IDCOMUNIDAD
-            + ") REFERENCES bus("+ COLUMNA_COMUNIDAD_ID +") )";
+            + ") REFERENCES "+ Estructura_BBDD.TABLA_COMUNIDAD + " ("+ COLUMNA_COMUNIDAD_ID +") )";
 
     public static final String CREATE_TABLA_PROPIEDAD = "CREATE TABLE " +
             Estructura_BBDD.TABLA_PROPIEDAD + "("
@@ -82,8 +84,9 @@ public class Estructura_BBDD {
             + Estructura_BBDD.COLUMNA_PROPIEDAD_TIPOPROPIETARIO+ " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_PROPIEDAD_HABITADO+ " Bit NOT NULL,"
             + Estructura_BBDD.COLUMNA_PROPIEDAD_AREA+ " REAL NOT NULL,"
+            +"UNIQUE("+ Estructura_BBDD.COLUMNA_PROPIEDAD_NUMERODEPROPIEDAD+")"
             +"  FOREIGN KEY("+ Estructura_BBDD.COLUMNA_PROPIEDAD_IDPROPIETARIO
-            + ") REFERENCES bus("+ COLUMNA_PROPIETARIO_ID +") )";
+            + ") REFERENCES "+ Estructura_BBDD.TABLA_PROPIETARIO + "("+ COLUMNA_PROPIETARIO_ID +") )";
 
 
     public static final String CREATE_TABLA_VEHICULO ="CREATE TABLE " +
@@ -95,20 +98,24 @@ public class Estructura_BBDD {
             + Estructura_BBDD.COLUMNA_VEHICULO_COLOR +  " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_VEHICULO_AÑO + " INTEGER NOT NULL,"
             + Estructura_BBDD.COLUMNA_VEHICULO_PLATENUMBER +" VARCHAR(10) NOT NULL,"
+            +"UNIQUE("+Estructura_BBDD.COLUMNA_VEHICULO_PLATENUMBER+")"
             +"  FOREIGN KEY("+ Estructura_BBDD.COLUMNA_VEHICULO_IDPROPIETARIO
-            + ") REFERENCES bus("+ COLUMNA_PROPIETARIO_ID +") )";
+            + ") REFERENCES " + Estructura_BBDD.TABLA_PROPIETARIO + "("+ COLUMNA_PROPIETARIO_ID +") )";
 
     public static final String CREATE_TABLA_HISTORICO = "CREATE TABLE " +
             Estructura_BBDD.TABLA_HISTORICO + "("
             + Estructura_BBDD.COLUMNA_HISTORICO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO +" INTEGER NOT NULL,"
+            + Estructura_BBDD.COLUMNA_HISTORICO_IDCOMUNIDAD +" INTEGER NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_FECHA + " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_HORA + " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_TIPOACCESO +" VARCHAR(20) NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_TIPOSEGURIDDA + " VARCHAR(30) NOT NULL,"
             + Estructura_BBDD.COLUMNA_HISTORICO_FOTO + " BLOB NOT NULL,"
             +"  FOREIGN KEY("+ Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO
-            + ") REFERENCES bus("+ COLUMNA_PROPIETARIO_ID +") )";
+            + ") REFERENCES " + Estructura_BBDD.TABLA_PROPIETARIO + "("+ COLUMNA_PROPIETARIO_ID +"),"
+            +"  FOREIGN KEY("+ Estructura_BBDD.COLUMNA_HISTORICO_IDCOMUNIDAD
+            + ") REFERENCES " + Estructura_BBDD.TABLA_COMUNIDAD + "("+ COLUMNA_COMUNIDAD_ID +") )";
 
 
 

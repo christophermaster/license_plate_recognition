@@ -12,11 +12,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.sandro.openalprsample.apiRest.models.ComunityApi;
+import com.sandro.openalprsample.apiRest.models.OwnerApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.ComunityDao;
 import com.sandro.openalprsample.crudDao.OwnerDao;
-import com.sandro.openalprsample.entity.Comunity;
-import com.sandro.openalprsample.entity.OwnerEntity;
 import com.sandro.openalprsample.estructura.Estructura_BBDD;
 
 import java.util.ArrayList;
@@ -24,37 +24,44 @@ import java.util.ArrayList;
 public class Owner extends AppCompatActivity {
 
 
+    //EDIT TEXT
     private EditText idOwner,
                      nameOwner,
                      surnameOwner,
                      numberIdentity;
 
+    //BUTTON
     private Button create,
                    update,
                    delete,
                    search;
 
+    //SPINNER
     private Spinner idComunity,
                     typeIdentity,
                     listOwnerSpin;
 
+    //HELPER DE LA BASE DE DATOS
     private BBDD_Helper helper ;
 
+    //LISTA QUE SE USA PARA LLENAR LOS SPINNER
     private ArrayList<String> listComunitySpinner,
                               listOwnerSpinner,
                               listSpinnerTypeIdentity;
 
 
-    private ArrayList<Comunity> listComunity;
-    private ArrayList<OwnerEntity> listOwner;
+    //LISTA QUE SE USA PARA CONTENER LOS MODELOS
+    private ArrayList<ComunityApi> listComunity;
+    private ArrayList<OwnerApi> listOwner;
 
+    //ADAPTARORES DE LOS SPINNER
     private ArrayAdapter<CharSequence> adaptadorComunity,
                                        adaptadorTypeIdentity,
                                        adaptadorOwner;
 
      private String selectTypeIdentity  = "";
 
-
+    // SE USA PARA SABER QUE ELEMENTO FUE SELECCIONADO EN EL SPINNER
     private Integer idcomuni = 0 ;
 
     @Override
@@ -80,13 +87,14 @@ public class Owner extends AppCompatActivity {
         create = (Button)findViewById(R.id.createOwner);
         search =(Button)findViewById(R.id.buscar);
         update =(Button)findViewById(R.id.actualizar);
+
         //BD
         helper = new BBDD_Helper(this);
 
 
 
         //EVENTOS CON SPINNER
-        listComunity("Seleccione Comunidad");
+        listComunity();
         adaptadorComunity = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listComunitySpinner);
         idComunity.setAdapter(adaptadorComunity);
 
@@ -96,7 +104,7 @@ public class Owner extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0)
 
-                    idcomuni = listComunity.get(position-1).getIdComunity();
+                    idcomuni = listComunity.get(position-1).getId();
 
                 else{
                     idcomuni = 0;
@@ -162,15 +170,29 @@ public class Owner extends AppCompatActivity {
 
     }
 
+    /**Create Owner
+     *
+     * @param view
+     * */
+
     public void  create(View view){
 
+        //Se instancia la bd
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia el modelo
+        OwnerApi model = new OwnerApi();
 
-        Long newRowId = OwnerDao.createOwner(nameOwner.getText().toString(), surnameOwner.getText().toString(),
-                idcomuni, numberIdentity.getText().toString(), selectTypeIdentity, db );
+        //Se almacena los datos  al modelo
+        model.setNameOwner(nameOwner.getText().toString());
+        model.setLastNameOwner(surnameOwner.getText().toString());
+        model.setIdentificationNumberOwner(numberIdentity.getText().toString());
+        model.setTypeIdentificationNumberOwner(selectTypeIdentity);
 
+        //Se crea el nuevo registro
+        Long newRowId = OwnerDao.createOwner(model, idcomuni,db );
 
+        //Se verefica si el registro se guardo o no correctamente
         if(newRowId == -1){
 
             Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
@@ -187,13 +209,27 @@ public class Owner extends AppCompatActivity {
 
     }
 
+    /**Update Owner
+     *
+     * @param view
+     * */
+
     public void update(View view) {
 
+        //Se instancia la bd
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia el modelo
+        OwnerApi model = new OwnerApi();
 
-        if(OwnerDao.updateOwner(idOwner.getText().toString(),nameOwner.getText().toString(), surnameOwner.getText().toString(),
-                idcomuni, numberIdentity.getText().toString(), selectTypeIdentity, db) == 1){
+        //Se almacena los datos  al modelo
+        model.setNameOwner(nameOwner.getText().toString());
+        model.setLastNameOwner(surnameOwner.getText().toString());
+        model.setIdentificationNumberOwner(numberIdentity.getText().toString());
+        model.setTypeIdentificationNumberOwner(selectTypeIdentity);
+
+        //Se verefica si el registro fue modificado o no correctamente
+        if(OwnerDao.updateOwner(model, idcomuni,db) == 1){
             Toast.makeText(getApplicationContext(), "Se actualizó el registro" , Toast.LENGTH_LONG).show();
 
             listOwner();
@@ -205,15 +241,22 @@ public class Owner extends AppCompatActivity {
         }
     }
 
+    /**Update Owner
+     *
+     * @param view
+     * */
 
     public void delete(View view){
 
+        //Se instancia la bd
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se verefica si el registro fue modificado o no correctamente
         if(OwnerDao.deleteOwner(idOwner.getText().toString(), db ) == 1){
 
             Toast.makeText(getApplicationContext(), "Se borro el registro", Toast.LENGTH_LONG).show();
 
+            // se resetea todos los campos
             idOwner.setText("");
 
             listOwner();
@@ -238,11 +281,17 @@ public class Owner extends AppCompatActivity {
     }
 
 
+    /**Search Owner
+     *
+     * @param view
+     * */
 
     public void buscar(View view) {
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getReadableDatabase();
 
+        //Colocamos los campos que queremos que se muestre en la busqueda
         String[] projection = {
                 //  Estructura_BBDD.COLUMNA_COMUNIDAD_ID,
                 Estructura_BBDD.COLUMNA_PROPIETARIO_IDCOMUNIDAD,
@@ -253,11 +302,15 @@ public class Owner extends AppCompatActivity {
 
         };
 
+        //condicion de busqueda
         String selection = Estructura_BBDD.COLUMNA_PROPIETARIO_ID + " = ?";
+
+        //valor de busqueda
         String[] selectionArgs = {idOwner.getText().toString()};
 
 
         try {
+            //Creacion de la consulta para la busqueda
 
             Cursor c = db.query(
 
@@ -272,7 +325,7 @@ public class Owner extends AppCompatActivity {
 
 
             c.moveToFirst();
-            listComunity(c.getString(0));
+            listComunitySpinner.add(c.getString(0));
             adaptadorComunity = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listComunitySpinner);
             idComunity.setAdapter(adaptadorComunity);
             nameOwner.setText(c.getString(1));
@@ -288,63 +341,78 @@ public class Owner extends AppCompatActivity {
         }
     }
 
+    /**List all owner in spinner
+     *
+     * */
 
     private void listOwner() {
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia la lista que se utulizara para mostrar lo elementos en el Spinner
+        listOwnerSpinner = new ArrayList<>();
+
+        //Se instancia la lista que tendra los propietarios
+        listOwner = new ArrayList<>();
+
+        //Se almacena la lista de propietarios
         listOwner =  OwnerDao.listOwner(db);
 
+        //Agregamos el primer elemento que se mostrara en el Spinner
+        listOwnerSpinner.add("Lista de Propietarios");
+
+        //Se verifica si existe propietarios o no
         if(listOwner!=null)
-            listOwnerSpinner();
-        else{
-            listOwnerSpinner.add("Selecciones");
-        }
+            //Se llena el Spinner
+            for (int i= 0; i<listOwner.size();i++){
+                listOwnerSpinner.add(listOwner.get(i).getNameOwner() + "-"
+                        + listOwner.get(i).getTypeIdentificationNumberOwner());
+
+            }
 
 
     }
 
-    private void listOwnerSpinner() {
+    /**List all Comunity in spinner
+     *
+     * */
 
-        listOwnerSpinner = new ArrayList<String>();
-        listOwnerSpinner.add("Lista de Usuario");
 
-        for (int i= 0; i<listOwner.size();i++){
-            listOwnerSpinner.add(listOwner.get(i).getOwn_name() + "-" + listOwner.get(i).getCom_id()+ "-"
-            + listOwner.get(i).getOwn_type_identification());
+    private void listComunity() {
 
-        }
-    }
-
-    private void listComunity(String valor) {
-
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia la lista que se utulizara para mostrar lo elementos en el Spinner
+        listComunitySpinner = new ArrayList<>();
+
+        //Se instancia la lista que tendra las comunidades
+        listComunity =  new ArrayList<>();
+
+        //Se almacena la lista de comunidad
         listComunity = ComunityDao.listComunity(db);
 
+        //Agregamos el primer elemento que se mostrara en el Spinner
+        listComunitySpinner.add("Seleccione Comunidad");
+
+        //Se verifica si existe propietarios o no
         if(listComunity!=null)
-            listSpinnerComunity(valor);
-        else{
-            listComunitySpinner.add("Seleccione Comunidad");
-        }
+            //Se llena el Spinner
+            for (int i= 0; i<listComunity.size();i++){
+
+               listComunitySpinner.add(listComunity.get(i).getNameComunity() + "-"
+                       + listComunity.get(i).getTypeComunity());
+
+            }
 
 
     }
 
-    private void listSpinnerComunity(String valor) {
 
-        listComunitySpinner = new ArrayList<String>();
-        listComunitySpinner.add(valor);
-
-        for (int i= 0; i<listComunity.size();i++){
-            if(valor != listComunity.get(i).getNameComunity() )
-            listComunitySpinner.add(listComunity.get(i).getNameComunity() + "-" + listComunity.get(i).getTypeComunity());
-
-        }
-    }
 
     private void listTypeIdentity(String valor){
-        listSpinnerTypeIdentity = new ArrayList<String>();
+        listSpinnerTypeIdentity = new ArrayList<>();
 
         listSpinnerTypeIdentity.add(valor);
 

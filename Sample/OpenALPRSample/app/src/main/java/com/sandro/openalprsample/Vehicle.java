@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.sandro.openalprsample.apiRest.models.OwnerApi;
+import com.sandro.openalprsample.apiRest.models.VehicleApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.OwnerDao;
 import com.sandro.openalprsample.crudDao.PropertyDao;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 
 public class Vehicle extends AppCompatActivity {
 
+    //EDIT TEXT
     private EditText make,
                     idVehicle,
                     pattern,
@@ -28,25 +31,29 @@ public class Vehicle extends AppCompatActivity {
                     year,
                     plateNumber;
 
+    //SPINNER
+    private Spinner spinnerNameOwner,spinnerlistVehicle ;
+    private ArrayAdapter<CharSequence> adaptadorOwner;
 
+    //Lista utilizada para mostrar los eleemntos en el spinner
+    private ArrayList<String>  listOwnerSpinner ,
+                               listVehicleSpinner ;
+
+    //lista utlizada para almecenar los modelos
+    private ArrayList<OwnerApi> listOwnerEntity;
+    private ArrayList<VehicleEntity> listVehicleEntity;
+
+
+    private Integer idOwner = 0 ;
 
 
     private BBDD_Helper helper ;
-    private Spinner spinnerNameOwner,spinnerlistVehicle ;
-
-    private ArrayList<String>  listOwnerSpinner ;
-    private ArrayList<String>  listVehicleSpinner ;
-
-    private ArrayAdapter<CharSequence> adaptadorOwner;
-    private ArrayList<OwnerEntity> listOwnerEntity;
-    private ArrayList<VehicleEntity> listVehicleEntity;
-    private Integer idOwner = 0 ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
 
+        //Se inicializa los componentes
         idVehicle = (EditText)findViewById(R.id.idVehicle);
         make = (EditText)findViewById(R.id.marca);
         pattern = (EditText)findViewById(R.id.modelo);
@@ -57,10 +64,14 @@ public class Vehicle extends AppCompatActivity {
         spinnerNameOwner= (Spinner)findViewById(R.id.nameOwner);
         spinnerlistVehicle = (Spinner)findViewById(R.id.listVehicle);
 
+        //Se instacia el
         helper = new BBDD_Helper(this);
 
 
+        //Se llena La Lista que se utlizara en el sppiner
         listOwner();
+
+
         adaptadorOwner = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listOwnerSpinner);
         spinnerNameOwner.setAdapter(adaptadorOwner);
         spinnerNameOwner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -69,7 +80,7 @@ public class Vehicle extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0)
 
-                    idOwner = listOwnerEntity.get(position-1).getOwn_id();
+                    idOwner = listOwnerEntity.get(position-1).getId();
 
                 else{
                     idOwner = 0;
@@ -84,6 +95,8 @@ public class Vehicle extends AppCompatActivity {
             }
         });
 
+        //Se llena La Lista que se utlizara en el sppiner
+
         listarVehicle();
         adaptadorOwner = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listVehicleSpinner);
         spinnerlistVehicle.setAdapter(adaptadorOwner);
@@ -91,13 +104,6 @@ public class Vehicle extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position!=0)
-                    System.out.print("aqui");
-                else{
-
-                    System.out.print("aqui si");
-
-                }
 
             }
 
@@ -112,15 +118,29 @@ public class Vehicle extends AppCompatActivity {
 
 
 
+    /**NEV CREATE
+     *
+     * @param view
+     * **/
     public void  create(View view){
 
+        //Se instancia la bd
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia el modelo
+        VehicleApi model = new VehicleApi();
 
-        Long newRowId = VehicleDao.createVehicle(idOwner, make.getText().toString(), pattern.getText().toString(),
-                color.getText().toString(), year.getText().toString(),plateNumber.getText().toString(), db );
+        //Se almacena los datos  al modelo
+        model.setMakeVehicle(make.getText().toString());
+        model.setColourVehicle( color.getText().toString());
+        model.setLecenseplateVehicle(plateNumber.getText().toString());
+        model.setLongVehicle(year.getText().toString());
+        model.setModelVehicle(pattern.getText().toString());
 
+        //Se crea el nuevo registro
+        Long newRowId = VehicleDao.createVehicle(model,idOwner,db );
 
+        //Se verefica si el registro se guardo o no correctamente
         if(newRowId == -1){
 
             Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
@@ -137,56 +157,70 @@ public class Vehicle extends AppCompatActivity {
 
     }
 
+    /**List all owner in spinner
+     *
+     * */
     private void listOwner() {
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia la lista que se utulizara para mostrar lo elementos en el Spinner
+        listOwnerSpinner = new ArrayList<>();
+
+        //Se instancia la lista que tendra los propietarios
+        listOwnerEntity = new ArrayList<>();
+
+        //Se almacena ls lista de propietarios
         listOwnerEntity =  OwnerDao.listOwner(db);
 
+        //Agregamos el primer elemento que se mostrara en el Spinner
+        listOwnerSpinner.add("Lista de propietarios");
+
+        //Se verifica si existe propietarios o no
         if(listOwnerEntity!=null)
-            listSpinnerOwner();
-        else{
-            listOwnerSpinner.add("Lista de Usuario");
-        }
+            //Se llena el Spinner
+            for (int i= 0; i<listOwnerEntity.size();i++){
+                listOwnerSpinner.add(listOwnerEntity.get(i).getNameOwner() + "-"
+                        + listOwnerEntity.get(i).getTypeIdentificationNumberOwner());
+
+            }
+
+
 
 
     }
 
-    private void listSpinnerOwner() {
-
-        listOwnerSpinner = new ArrayList<String>();
-        listOwnerSpinner.add("Lista de Usuario");
-
-        for (int i= 0; i<listOwnerEntity.size();i++){
-            listOwnerSpinner.add(listOwnerEntity.get(i).getOwn_name() + "-" + listOwnerEntity.get(i).getCom_id()+ "-"
-                    + listOwnerEntity.get(i).getOwn_type_identification());
-
-        }
-    }
-
-
+    /**List all vehicle in spinner
+     *
+     * */
     private void listarVehicle(){
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getWritableDatabase();
+
+        //Se instancia la lista que se utulizara para mostrar lo elementos en el Spinner
+        listVehicleSpinner = new ArrayList<>();
+
+        //Se instancia la lista que tendra los vehiculos
+        listVehicleEntity = new ArrayList<>();
+
+        //Se almacena ls lista de vehiculo
         listVehicleEntity =  VehicleDao.listVehicle(db);
 
+        //Agregamos el primer elemento que se mostrara en el Spinner
+        listVehicleSpinner.add("Lista de Vehiculos");
+
+        //Se verifica si existe vehiculos o no
         if(listVehicleEntity!=null)
-            llenarSpinnerVehicle();
-        else{
-            listVehicleSpinner.add("Lista de Propiedades");
-        }
+            //Se llena el Spinner
+            for (int i= 0; i<listVehicleEntity.size();i++){
 
-    }
+                listVehicleSpinner.add(listVehicleEntity.get(i).getVeh_id() + "-" +
+                        listVehicleEntity.get(i).getVeh_licenceplate() );
 
-    private void llenarSpinnerVehicle() {
+            }
 
-        listVehicleSpinner = new ArrayList<String>();
-        listVehicleSpinner.add("Lista de Propiedades");
-
-        for (int i= 0; i<listVehicleEntity.size();i++){
-            listVehicleSpinner.add(listVehicleEntity.get(i).getVeh_id() + "-" + listVehicleEntity.get(i).getVeh_licenceplate() );
-
-        }
     }
 
 

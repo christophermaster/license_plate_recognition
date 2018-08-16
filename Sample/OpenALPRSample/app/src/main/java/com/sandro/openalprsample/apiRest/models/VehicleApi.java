@@ -22,7 +22,7 @@ public class VehicleApi {
     private String lecenseplateVehicle;
     @SerializedName("longVehicle")
     @Expose
-    private Integer longVehicle;
+    private String longVehicle;
 
     public Integer getId() {
         return id;
@@ -64,11 +64,11 @@ public class VehicleApi {
         this.lecenseplateVehicle = lecenseplateVehicle;
     }
 
-    public Integer getLongVehicle() {
+    public String getLongVehicle() {
         return longVehicle;
     }
 
-    public void setLongVehicle(Integer longVehicle) {
+    public void setLongVehicle(String longVehicle) {
         this.longVehicle = longVehicle;
     }
 

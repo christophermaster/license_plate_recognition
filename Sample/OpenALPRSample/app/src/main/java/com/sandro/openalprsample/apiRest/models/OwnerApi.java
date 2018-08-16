@@ -18,7 +18,7 @@ public class OwnerApi {
     private String lastNameOwner;
     @SerializedName("identificationNumberOwner")
     @Expose
-    private Integer identificationNumberOwner;
+    private String identificationNumberOwner;
     @SerializedName("typeIdentificationNumberOwner")
     @Expose
     private String typeIdentificationNumberOwner;
@@ -53,11 +53,11 @@ public class OwnerApi {
         this.lastNameOwner = lastNameOwner;
     }
 
-    public Integer getIdentificationNumberOwner() {
+    public String getIdentificationNumberOwner() {
         return identificationNumberOwner;
     }
 
-    public void setIdentificationNumberOwner(Integer identificationNumberOwner) {
+    public void setIdentificationNumberOwner(String identificationNumberOwner) {
         this.identificationNumberOwner = identificationNumberOwner;
     }
 

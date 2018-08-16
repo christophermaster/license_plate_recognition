@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.sandro.openalprsample.apiRest.models.AccessHistoryApi;
 import com.sandro.openalprsample.entity.HistoricalAccessEntity;
 import com.sandro.openalprsample.entity.VehicleEntity;
 import com.sandro.openalprsample.estructura.Estructura_BBDD;
@@ -16,17 +17,24 @@ public class HistoricalAccessDao {
     private static ArrayList<HistoricalAccessEntity> listAccess;
 
 
-    public static Long createAccess(Integer idOwner, String date , String hour, String typeAccess,
-                                    String typeSecurity, byte[] photo, SQLiteDatabase db){
+    /**New Access
+     * @param model
+     * */
+    public static Long createAccess(AccessHistoryApi model, SQLiteDatabase db){
 
+        //Se instancia el Objeto para insertar elementos a la base de datos
         ContentValues values = new ContentValues();
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO,idOwner);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FECHA, date);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_HORA, hour);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOACCESO,typeAccess);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOSEGURIDDA,typeSecurity);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FOTO,photo);
 
+        //Se almacena los resultados temporalmente
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO,model.getIdOwner());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_IDCOMUNIDAD,model.getCom_id());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FECHA, model.getDate());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_HORA, model.getHour());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOACCESO,model.getTypeaccess());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOSEGURIDDA,model.getTypesecurity());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FOTO,model.getPhotho());
+
+        //Se insertan
         Long newRowId = db.insert(Estructura_BBDD.TABLA_HISTORICO,null,values);
 
         return newRowId;
@@ -34,21 +42,32 @@ public class HistoricalAccessDao {
     }
 
 
+    /**Update Access
+     *
+     * @param model
+     *
+     * */
+    public static Integer updateAccess(AccessHistoryApi model, SQLiteDatabase db){
 
-    public static Integer updateVehicle(String id, Integer idOwner, String date , String hour, String typeAccess,
-                                        String typeSecurity, byte[] photo, SQLiteDatabase db){
-
+        //Se instancia el Objeto para insertar elementos a la base de datos
         ContentValues values = new ContentValues();
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO,idOwner);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FECHA, date);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_HORA, hour);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOACCESO,typeAccess);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOSEGURIDDA,typeSecurity);
-        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FOTO,photo);
 
+        //Se almacena los resultados temporalmente
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_IDPROPIETARIO,model.getIdOwner());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_IDCOMUNIDAD,model.getCom_id());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FECHA, model.getDate());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_HORA, model.getHour());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOACCESO,model.getTypeaccess());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_TIPOSEGURIDDA,model.getTypesecurity());
+        values.put(Estructura_BBDD.COLUMNA_HISTORICO_FOTO,model.getPhotho());
+
+        //Condicion de actualizacion
         String selection = Estructura_BBDD.COLUMNA_HISTORICO_ID + "= ?";
-        String[] selectionArgs = {id};
 
+        //Valor del elemento que se va actualizar
+        String[] selectionArgs = {model.getId().toString()};
+
+        //Se actualiza
         int count = db.update(
                 Estructura_BBDD.TABLA_HISTORICO,
                 values,
@@ -60,8 +79,14 @@ public class HistoricalAccessDao {
         return count;
     }
 
+    /**Delete Access
+     *
+     * @param id
+     * @param db
+     *
+     * */
 
-    public static Integer deleteVehicle(String id, SQLiteDatabase db){
+    public static Integer deleteAccess(String id, SQLiteDatabase db){
 
         String selection = Estructura_BBDD.COLUMNA_HISTORICO_ID + " = ?";
         String[] selectionArgs = {id};
@@ -71,6 +96,13 @@ public class HistoricalAccessDao {
 
 
     }
+
+
+    /**List ALl Owner
+     *
+     * @param db
+     *
+     * */
 
 
     public static ArrayList<HistoricalAccessEntity> listVehicle(SQLiteDatabase db){

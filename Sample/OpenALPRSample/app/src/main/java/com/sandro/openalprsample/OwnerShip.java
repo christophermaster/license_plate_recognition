@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.sandro.openalprsample.apiRest.models.OwnerApi;
+import com.sandro.openalprsample.apiRest.models.OwnershipApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.OwnerDao;
 import com.sandro.openalprsample.crudDao.PropertyDao;
@@ -22,28 +24,33 @@ public class OwnerShip extends AppCompatActivity {
 
 
 
-    private BBDD_Helper helper ;
 
+    //EDIT TEXT
     private EditText area,
             idOwnership,
             inhabited,
             number,
             type;
 
+    //SPINNER
     private Spinner spinnerNameOwner ;
     private Spinner spinnerOwnership;
 
+    //ADAPTARORES DE LOS SPINNER
     private ArrayAdapter<CharSequence> adaptadorOwner;
 
-    private ArrayList<OwnerEntity> listOwnerEntity;
+    //LISTA QUE SE USA PARA CONTENER LOS MODELOS
+    private ArrayList<OwnerApi> listOwnerEntity;
     private ArrayList<OwnerShipEntity> ListOwnershipEntity;
 
+    //LISTA QUE SE USA PARA LLENAR LOS SPINNER
     private ArrayList<String>  listOwnerSpinner ;
     private ArrayList<String>  listOwnershipSpinner ;
 
+    //HELPER DE LA BASE DE DATOS
+    private BBDD_Helper helper ;
 
-
-
+    // SE USA PARA SABER QUE ELEMENTO FUE SELECCIONADO EN EL SPINNER
     private Integer idOwner = 0 ;
 
 
@@ -68,6 +75,7 @@ public class OwnerShip extends AppCompatActivity {
         helper = new BBDD_Helper(this);
 
 
+        //Se llena La Lista que se utlizara en el sppiner
         listOwner();
         adaptadorOwner = new ArrayAdapter(this,android.R.layout.simple_spinner_item,listOwnerSpinner);
         spinnerNameOwner.setAdapter(adaptadorOwner);
@@ -77,7 +85,7 @@ public class OwnerShip extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position!=0)
 
-                    idOwner = listOwnerEntity.get(position-1).getOwn_id();
+                    idOwner = listOwnerEntity.get(position-1).getId();
 
                 else{
                     idOwner = 0;
@@ -117,25 +125,31 @@ public class OwnerShip extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
     }
 
 
-
+    /**Create Ownership
+     *
+     * @param view
+     * */
     public void  create(View view){
 
+        //Se instancia la bd
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia el modelo
+        OwnershipApi model = new OwnershipApi();
 
-        Long newRowId = PropertyDao.createOwnership(area.getText().toString(), inhabited.getText().toString(),
-                idOwner, number.getText().toString(), type.getText().toString(), db );
+        //Se almacena los datos  al modelo
+        model.setArea(Double.valueOf(area.getText().toString()));
+        model.setInhabited(Boolean.valueOf(inhabited.getText().toString()));
+        model.setOwnershipNumber(number.getText().toString());
+        model.setTypeOwnership(type.getText().toString());
 
+        //Se crea el nuevo registro
+        Long newRowId = PropertyDao.createOwnership(model,idOwner, db );
 
+        //Se verefica si el registro se guardo o no correctamente
         if(newRowId == -1){
 
             Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
@@ -152,63 +166,65 @@ public class OwnerShip extends AppCompatActivity {
 
     }
 
+    /**List all owner in spinner
+     *
+     * */
     private void listOwner() {
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        //Se instancia la lista que se utulizara para mostrar lo elementos en el Spinner
+        listOwnerSpinner = new ArrayList<>();
+
+        //Se instancia la lista que tendra los propietarios
+        listOwnerEntity = new ArrayList<>();
+
+        //Se almacena ls lista de propietarios
         listOwnerEntity =  OwnerDao.listOwner(db);
 
+        //Agregamos el primer elemento que se mostrara en el Spinner
+        listOwnerSpinner.add("Lista de propietarios");
+
+        //Se verifica si existe propietarios o no
         if(listOwnerEntity!=null)
-            listSpinnerOwner();
-        else{
-            listOwnerSpinner.add("Lista de Usuario");
-        }
+            //Se llena el Spinner
+            for (int i= 0; i<listOwnerEntity.size();i++){
+                listOwnerSpinner.add(listOwnerEntity.get(i).getNameOwner() + "-"
+                        + listOwnerEntity.get(i).getTypeIdentificationNumberOwner());
+
+            }
 
 
     }
 
-    private void listSpinnerOwner() {
-
-        listOwnerSpinner = new ArrayList<String>();
-        listOwnerSpinner.add("Lista de Usuario");
-
-        for (int i= 0; i<listOwnerEntity.size();i++){
-            listOwnerSpinner.add(listOwnerEntity.get(i).getOwn_name() + "-" + listOwnerEntity.get(i).getCom_id()+ "-"
-                    + listOwnerEntity.get(i).getOwn_type_identification());
-
-        }
-    }
-
-
+    /**List all ownership in spinner
+     *
+     * */
     private void listarOwnership(){
 
+        //Se instancia la base de datos
         SQLiteDatabase db = helper.getWritableDatabase();
+
+        //Se instancia la lista que se utulizara para mostrar lo elementos en el Spinner
+        listOwnershipSpinner = new ArrayList<>();
+
+        //Se almacena ls lista de propiedades
         ListOwnershipEntity =  PropertyDao.listOwnerShip(db);
 
+        //Agregamos el primer elemento que se mostrara en el Spinner
+        listOwnershipSpinner.add("Lista de propiedades");
+
+        //Se verifica si existe propietarios o no
         if(ListOwnershipEntity!=null)
-            llenarSpinnerOwnership();
-        else{
-            listOwnershipSpinner.add("Lista de Propiedades");
-        }
+            for (int i= 0; i<ListOwnershipEntity.size();i++){
+                //Se llena el Spinner
+                listOwnershipSpinner.add(ListOwnershipEntity.get(i).getOsh_inhabited() + "-" + ListOwnershipEntity.get(i).getOsh_number()+ "-"
+                        + ListOwnershipEntity.get(i).getOsh_area() +  "-" + ListOwnershipEntity.get(i).getOsh_type() );
+
+            }
 
     }
-
-    private void llenarSpinnerOwnership() {
-
-        listOwnershipSpinner = new ArrayList<String>();
-        listOwnershipSpinner.add("Lista de Propiedades");
-
-        for (int i= 0; i<ListOwnershipEntity.size();i++){
-            listOwnershipSpinner.add(ListOwnershipEntity.get(i).getOsh_inhabited() + "-" + ListOwnershipEntity.get(i).getOsh_number()+ "-"
-                    + ListOwnershipEntity.get(i).getOsh_area() +  "-" + ListOwnershipEntity.get(i).getOsh_type() );
-
-        }
-    }
-
-
-
-
-
 
 
 }

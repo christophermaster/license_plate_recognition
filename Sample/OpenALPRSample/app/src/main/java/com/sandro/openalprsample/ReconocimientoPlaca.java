@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.sandro.openalprsample.apiRest.models.AccessHistoryApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.HistoricalAccessDao;
 import com.sandro.openalprsample.crudDao.OwnerDao;
@@ -206,8 +207,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
                                             if(!verifivation){
 
                                                 SQLiteDatabase db = helper.getWritableDatabase();
-                                                verifivation = VehicleDao.existePlaca(
-                                                        results.getResults().get(0).getCandidates().get(i).getPlate(),db);
+                                                verifivation = VehicleDao.exists(db, results.getResults().get(0).getCandidates().get(i).getPlate());
 
                                             }
 
@@ -308,8 +308,18 @@ public class ReconocimientoPlaca extends AppCompatActivity {
         formatohora = new SimpleDateFormat("HH:mm:ss");
 
 
-       Long newRowId = HistoricalAccessDao.createAccess(1,formatoFecha.format(fechaActual),
-               formatohora.format(fechaActual), "E","A",photo,db );
+        AccessHistoryApi model = new AccessHistoryApi();
+
+        model.setIdOwner(1);
+        model.setTypesecurity("A");
+        model.setPhotho(photo);
+        model.setDate(formatoFecha.format(fechaActual));
+        model.setHour(formatohora.format(fechaActual));
+        model.setCom_id(1);
+        model.setTypeaccess("E");
+
+
+       Long newRowId = HistoricalAccessDao.createAccess(model,db );
 
 
         if(newRowId == -1){
