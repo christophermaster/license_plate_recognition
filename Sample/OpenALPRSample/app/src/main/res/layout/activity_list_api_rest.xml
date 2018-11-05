@@ -33,33 +33,23 @@
             android:id="@+id/bComunity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Comunidad"
+            android:text="Bajar Datos"
             android:onClick="comunity"/>
-        <Button
-            android:id="@+id/bOwner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Propietario"
-            android:onClick="owner"/>
-        <Button
-            android:id="@+id/bOwnerShip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Propiedad"
-            android:onClick="ownerShip"/>
-        <Button
-            android:id="@+id/bVehicle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Vehiculo"
-            android:onClick="vehicle"/>
 
         <Button
             android:id="@+id/bAccess"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Historial de Acceso"
+            android:text="Subir Datos"
             />
+
+        <Button
+            android:id="@+id/inf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Informacion de Memoria"
+            android:onClick="memoryInformation"
+            tools:ignore="OnClick" />
 
 
     </LinearLayout>

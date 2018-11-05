@@ -3,6 +3,9 @@ package com.sandro.openalprsample.apiRest.services;
 import com.sandro.openalprsample.apiRest.models.AccessHistoryApi;
 import com.sandro.openalprsample.apiRest.models.ComunityApi;
 import com.sandro.openalprsample.apiRest.models.DeviceApi;
+
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

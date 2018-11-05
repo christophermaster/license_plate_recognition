@@ -14,10 +14,7 @@ import com.sandro.openalprsample.apiRest.models.OwnerApi;
 import com.sandro.openalprsample.apiRest.models.VehicleApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.OwnerDao;
-import com.sandro.openalprsample.crudDao.PropertyDao;
 import com.sandro.openalprsample.crudDao.VehicleDao;
-import com.sandro.openalprsample.entity.OwnerEntity;
-import com.sandro.openalprsample.entity.VehicleEntity;
 
 import java.util.ArrayList;
 
@@ -41,7 +38,7 @@ public class Vehicle extends AppCompatActivity {
 
     //lista utlizada para almecenar los modelos
     private ArrayList<OwnerApi> listOwnerEntity;
-    private ArrayList<VehicleEntity> listVehicleEntity;
+    private ArrayList<VehicleApi> listVehicleEntity;
 
 
     private Integer idOwner = 0 ;
@@ -216,8 +213,8 @@ public class Vehicle extends AppCompatActivity {
             //Se llena el Spinner
             for (int i= 0; i<listVehicleEntity.size();i++){
 
-                listVehicleSpinner.add(listVehicleEntity.get(i).getVeh_id() + "-" +
-                        listVehicleEntity.get(i).getVeh_licenceplate() );
+                listVehicleSpinner.add(listVehicleEntity.get(i).getId() + "-" +
+                        listVehicleEntity.get(i).getLecenseplateVehicle() );
 
             }
 

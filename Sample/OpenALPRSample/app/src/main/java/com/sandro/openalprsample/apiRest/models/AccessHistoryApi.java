@@ -13,9 +13,9 @@ public class AccessHistoryApi {
     @Expose
     private Integer idOwner;
 
-    @SerializedName("com_id")
+    @SerializedName("code")
     @Expose
-    private Integer com_id;
+    private Integer code;
 
     @SerializedName("date")
     @Expose
@@ -35,6 +35,9 @@ public class AccessHistoryApi {
     @SerializedName("ruta")
     @Expose
     private String ruta;
+    @SerializedName("com_id")
+    @Expose
+    private Integer com_id;
 
     public AccessHistoryApi() {
     }
@@ -109,6 +112,14 @@ public class AccessHistoryApi {
 
     public void setIdOwner(Integer idOwner) {
         this.idOwner = idOwner;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer com_id) {
+        this.code = com_id;
     }
 
     public Integer getCom_id() {

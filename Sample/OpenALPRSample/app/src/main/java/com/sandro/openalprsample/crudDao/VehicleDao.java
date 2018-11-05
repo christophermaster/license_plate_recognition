@@ -5,14 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sandro.openalprsample.apiRest.models.VehicleApi;
-import com.sandro.openalprsample.entity.VehicleEntity;
+
 import com.sandro.openalprsample.estructura.Estructura_BBDD;
 
 import java.util.ArrayList;
 
 public class VehicleDao {
 
-    private static ArrayList<VehicleEntity> listVehicle;
+    private static ArrayList<VehicleApi> listVehicle;
 
 
     /**New Vehicle
@@ -103,23 +103,22 @@ public class VehicleDao {
      *
      * */
 
-    public static ArrayList<VehicleEntity> listVehicle(SQLiteDatabase db){
+    public static ArrayList<VehicleApi> listVehicle(SQLiteDatabase db){
 
-        VehicleEntity comu;
-        listVehicle = new ArrayList<VehicleEntity>();
+        VehicleApi comu;
+        listVehicle = new ArrayList<VehicleApi>();
 
         Cursor c = db.rawQuery("SELECT * FROM " + Estructura_BBDD.TABLA_VEHICULO,null);
 
         while (c.moveToNext()){
 
-            comu  = new VehicleEntity();
-            comu.setVeh_id(c.getInt(0));
-            comu.setOwn_id(c.getInt(1));
-            comu.setVeh_make(c.getString(2));
-            comu.setVeh_model(c.getString(3));
-            comu.setVeh_colour(c.getString(4));
-            comu.setVeh_year(c.getInt(5));
-            comu.setVeh_licenceplate(c.getString(6));
+            comu  = new VehicleApi();
+            comu.setId(c.getInt(0));
+            comu.setMakeVehicle(c.getString(2));
+            comu.setModelVehicle(c.getString(3));
+            comu.setColourVehicle(c.getString(4));
+            comu.setLongVehicle(c.getString(5));
+            comu.setLecenseplateVehicle(c.getString(6));
 
             listVehicle.add(comu);
 
@@ -147,6 +146,19 @@ public class VehicleDao {
         }
 
         return false;
+    }
+
+    public static  Integer idOwner(SQLiteDatabase db, String placa){
+        //Verificar si existe registro con la placa introducida
+        Cursor c = db.rawQuery("SELECT OWN_ID FROM " + Estructura_BBDD.TABLA_VEHICULO + " WHERE " +
+                Estructura_BBDD.COLUMNA_VEHICULO_PLATENUMBER + " = " + "'" + placa + "'",null);
+
+        if(c.moveToNext()){
+
+            return c.getInt(0);
+        }
+
+        return 0;
     }
 
 }

@@ -17,7 +17,7 @@ public class ServiceProvider {
             // Se crea la instancia Retrofit
 
             service = new Retrofit.Builder()
-                    .baseUrl("http://192.168.99.1:8090/")
+                    .baseUrl("http://10.0.0.11:8090/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(ApiService.class);
 

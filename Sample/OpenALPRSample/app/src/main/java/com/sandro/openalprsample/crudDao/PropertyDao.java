@@ -5,15 +5,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sandro.openalprsample.apiRest.models.OwnershipApi;
-import com.sandro.openalprsample.entity.OwnerEntity;
-import com.sandro.openalprsample.entity.OwnerShipEntity;
 import com.sandro.openalprsample.estructura.Estructura_BBDD;
 
 import java.util.ArrayList;
 
 public class PropertyDao {
 
-    private static ArrayList<OwnerShipEntity> listOwner;
+    private static ArrayList<OwnershipApi> listOwner;
 
 
     /**New Owner
@@ -30,7 +28,12 @@ public class PropertyDao {
 
         //Se almacena los resultados temporalmente
         values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_AREA,model.getArea());
-        values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_HABITADO, model.getInhabited());
+
+        if( model.getInhabited())
+            values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_HABITADO, 1);
+        else
+            values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_HABITADO, 0);
+
         values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_NUMERODEPROPIEDAD, model.getOwnershipNumber());
         values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_TIPOPROPIETARIO,model.getTypeOwnership());
         values.put(Estructura_BBDD.COLUMNA_PROPIEDAD_IDPROPIETARIO,idOwner);
@@ -106,10 +109,10 @@ public class PropertyDao {
      * @param db
      *
      * */
-    public static ArrayList<OwnerShipEntity> listOwnerShip(SQLiteDatabase db){
+    public static ArrayList<OwnershipApi> listOwnerShip(SQLiteDatabase db){
 
-        OwnerShipEntity comu;
-        listOwner = new ArrayList<OwnerShipEntity>();
+        OwnershipApi comu;
+        listOwner = new ArrayList<OwnershipApi>();
 
         Cursor c = db.rawQuery("SELECT * FROM " + Estructura_BBDD.TABLA_PROPIEDAD,null);
 
@@ -117,14 +120,16 @@ public class PropertyDao {
 
         while (c.moveToNext()){
 
-            comu  = new OwnerShipEntity();
+            comu  = new OwnershipApi();
 
-            comu.setOsh_id(c.getInt(0));
-            comu.setOwn_id(c.getInt(1));
-            comu.setOsh_area(c.getDouble(5));
-            comu.setOsh_inhabited(c.getInt(4));
-            comu.setOsh_number(c.getString(2));
-            comu.setOsh_type(c.getString(3));
+            comu.setId(c.getInt(0));
+            comu.setArea(c.getDouble(5));
+            if(c.getInt(4) == 1)
+                comu.setInhabited(true);
+            else
+                comu.setInhabited(false);
+            comu.setOwnershipNumber(c.getString(2));
+            comu.setTypeOwnership(c.getString(3));
 
 
             listOwner.add(comu);

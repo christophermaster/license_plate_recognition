@@ -77,6 +77,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
 
     private BBDD_Helper helper ;
     private Boolean verifivation ;
+    private String placa;
 
 
     @Override
@@ -92,6 +93,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
         camara = (ImageView) findViewById(R.id.camara);
         carpeta = (ImageView) findViewById(R.id.carpeta);
+        placa = null;
      /*  click.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -208,6 +210,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
 
                                                 SQLiteDatabase db = helper.getWritableDatabase();
                                                 verifivation = VehicleDao.exists(db, results.getResults().get(0).getCandidates().get(i).getPlate());
+                                                placa =  results.getResults().get(0).getCandidates().get(i).getPlate();
 
                                             }
 
@@ -216,7 +219,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
                                         resultTextView.setText(listPlaca);
                                         resultPorcenytaje.setText(listPorcentaje);
                                         try {
-                                            create(verifivation);
+                                            create(placa,verifivation);
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -295,7 +298,7 @@ public class ReconocimientoPlaca extends AppCompatActivity {
     }
 
 
-    public void create(Boolean existe) throws IOException {
+    public void create(String placa, Boolean exists) throws IOException {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         SimpleDateFormat formatoFecha,formatohora;
@@ -309,35 +312,44 @@ public class ReconocimientoPlaca extends AppCompatActivity {
 
 
         AccessHistoryApi model = new AccessHistoryApi();
+        Integer id = VehicleDao.idOwner(db,placa);
+        if( id != 0)
+            model.setIdOwner(id);
 
-        model.setIdOwner(1);
         model.setTypesecurity("A");
         model.setPhotho(photo);
         model.setDate(formatoFecha.format(fechaActual));
         model.setHour(formatohora.format(fechaActual));
-        model.setCom_id(1);
         model.setTypeaccess("E");
+        model.setCom_id(1);
 
 
-       Long newRowId = HistoricalAccessDao.createAccess(model,db );
+
+        if(exists && id != 0 ){
+
+            System.out.println("id Propietario : " + model.getDate());
+            System.out.println("id Propietario : " + model.getHour());
+            System.out.println("id Propietario : " + model.getCom_id());
+            System.out.println("id Propietario : " + model.getCode());
+            System.out.println("id Propietario : " + model.getOwn_id());
 
 
-        if(newRowId == -1){
+            Long newRowId = HistoricalAccessDao.createAccess(model,db );
 
-            Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
+            if(newRowId == -1){
 
-        }else{
+                Toast.makeText(getApplicationContext(),"No se guardó el registro ", Toast.LENGTH_LONG).show();
 
-            if(existe){
-                pase.setText("Placa Permitida.");
-
-            }else {
-                pase.setText("Placa No Permitada.");
             }
+            pase.setText("Placa Permitida.");
 
-            Toast.makeText(getApplicationContext(),"Se guardó el registro ", Toast.LENGTH_LONG).show();
-
+        }else {
+            pase.setText("Placa No Permitada.");
         }
+
+        Toast.makeText(getApplicationContext(),"Se guardó el registro ", Toast.LENGTH_LONG).show();
+
+
 
     }
 

@@ -15,8 +15,7 @@ import com.sandro.openalprsample.apiRest.models.OwnershipApi;
 import com.sandro.openalprsample.conexion.BBDD_Helper;
 import com.sandro.openalprsample.crudDao.OwnerDao;
 import com.sandro.openalprsample.crudDao.PropertyDao;
-import com.sandro.openalprsample.entity.OwnerEntity;
-import com.sandro.openalprsample.entity.OwnerShipEntity;
+
 
 import java.util.ArrayList;
 
@@ -41,7 +40,7 @@ public class OwnerShip extends AppCompatActivity {
 
     //LISTA QUE SE USA PARA CONTENER LOS MODELOS
     private ArrayList<OwnerApi> listOwnerEntity;
-    private ArrayList<OwnerShipEntity> ListOwnershipEntity;
+    private ArrayList<OwnershipApi> ListOwnershipEntity;
 
     //LISTA QUE SE USA PARA LLENAR LOS SPINNER
     private ArrayList<String>  listOwnerSpinner ;
@@ -219,8 +218,8 @@ public class OwnerShip extends AppCompatActivity {
         if(ListOwnershipEntity!=null)
             for (int i= 0; i<ListOwnershipEntity.size();i++){
                 //Se llena el Spinner
-                listOwnershipSpinner.add(ListOwnershipEntity.get(i).getOsh_inhabited() + "-" + ListOwnershipEntity.get(i).getOsh_number()+ "-"
-                        + ListOwnershipEntity.get(i).getOsh_area() +  "-" + ListOwnershipEntity.get(i).getOsh_type() );
+                listOwnershipSpinner.add(ListOwnershipEntity.get(i).getInhabited() + "-" + ListOwnershipEntity.get(i).getOwnershipNumber()+ "-"
+                        + ListOwnershipEntity.get(i).getArea() +  "-" + ListOwnershipEntity.get(i).getTypeOwnership() );
 
             }
 
